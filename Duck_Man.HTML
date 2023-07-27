@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Duck_Man</title>
+    <link rel="stylesheet" href="Duck_Man.CSS" />
+  </head>
+  <body onload="menu()">
+    <div id="wrapper">
+      <h1 id="title"></h1>
+      <div class="Menu">
+        <img class="img" src="gamer.jpeg" alt="Your Picture" />
+        <input placeholder="Enter Your Name" id="inputName" type="text" />
+        <button class="btn" onclick="startGame()">Start Game</button>
+      </div>
+      <section id="gameScreen">
+        <div class="Map">
+          <div class="cloud">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <div class="Hud">
+            <div class="Points"></div>
+            <div class="Health"></div>
+            <div class="Timer"></div>
+          </div>
+          <div class="Character"></div>
+        </div>
+        <div class="grass"></div>
+      </section>
+    </div>
+    <script src="Duck_Man.JS"></script>
+  </body>
+</html>
