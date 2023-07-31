@@ -16,6 +16,7 @@ body {
 }
 #gameScreen {
   width: 80rem;
+  display: none;
   height: 40rem;
   margin-top: 5%;
   overflow: hidden;
@@ -38,7 +39,7 @@ body {
   justify-content: space-around;
   position: relative;
 }
-.Hud .Name,
+.Hud .Player,
 .Hud .Points,
 .Hud .Health,
 .Hud .Timer {
@@ -67,13 +68,12 @@ body {
   height: 600px;
   flex-direction: column;
 }
-.img {
+.Menu .img {
   width: 400px;
   height: 300px;
   margin: 10px;
-  border: 2px solid black;
 }
-#inputName {
+.Menu .PlayerName {
   text-align: center;
   font-size: x-large;
   width: 400px;
@@ -81,7 +81,7 @@ body {
   margin: 10px;
   border-radius: 25px;
 }
-.btn {
+.Menu .btn {
   width: 200px;
   margin: 20em;
   height: 50px;
