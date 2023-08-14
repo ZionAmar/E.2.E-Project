@@ -25,7 +25,7 @@ document.addEventListener("keypress", (e) => {
   if (e.code == "Space" && !isJumping) Jump();
 });
 //--Timer-----------
-let sec = 0,
+let sec = 1,
   min = 0;
 function Timer() {
   setInterval(() => {
@@ -58,17 +58,60 @@ function Move(object, time) {
   }, time);
 }
 //----Zion Amar---------------------------------------------------
+let inputName = "";
+let Btns = [];
+document.querySelector("#title").innerHTML = "Duck Man Game";
+Menu();
+function Menu() {
+  inputName = `<input class="PlayerName" placeholder="Enter Your Name..." type="text" />`;
+  Btns = [
+    `<button class="btn" onclick="startGame()"><b>Start Game</b></button>`,
+    `<button class="btn" onclick="Options()">Options</button>`,
+    `<button class="btn" onclick="Exit()">Exit</button>`,
+  ];
+  document.querySelector(".Map").style.opacity = 0.1;
+  document.querySelector(
+    ".Menu"
+  ).innerHTML = `<h1>Menu Game</h1>${inputName}${Btns[0]}${Btns[1]}${Btns[2]}`;
+}
+function Options() {
+  Btns = [
+    `<button class="btn" onclick="Mute()">Mute</button>`,
+    `<button class="btn" onclick="Language()">Language</button>`,
+    `<button class="btn" onclick="Menu()">Back</button>`,
+  ];
+  document.querySelector(
+    ".Menu"
+  ).innerHTML = `<h1>Options</h1>${Btns[0]}${Btns[1]}${Btns[2]}`;
+}
+function Pause() {
+  document.querySelector(".Map").style.opacity = 0.1;
+  document.querySelector(".Menu").style.display = "flex";
+  Btns = [
+    `<button class="btn" onclick="Play()"><b>Play</b></button>`,
+    `<button class="btn" onclick="startGame()">New Game</button>`,
+    `<button class="btn" onclick="Exit()">Exit</button>`,
+  ];
+  document.querySelector(
+    ".Menu"
+  ).innerHTML = `<h1>Paused</h1>${Btns[0]}${Btns[1]}${Btns[2]}`;
+}
+function Exit() {
+  if (confirm("Are you sure?")) window.close();
+}
 function startGame() {
   trees();
   clouds();
   let val = document.querySelector(".PlayerName").value;
+  document.querySelector(".Map").style.opacity = 1;
   document.querySelector(".Menu").style.display = "none";
   document.querySelector("#gameScreen").style.display = "block";
   document.querySelector(".Hud").innerHTML = `
-  <div class="Health">Health</div>
-  <div class="Player">Player</div>
-  <div class="Timer">Timer</div>
-  <div class="Points">Points</div>`;
+  <div class="Health">Health:</div>
+  <div class="Player">Player: ${val}</div>
+  <button class="pause" onclick="Pause()" style="font-size:44px"><i class="fa fa-pause"></i></button>
+  <div class="Timer">Timer: 00:00</div>
+  <div class="Points">Points:</div>`;
   Timer();
 }
 //----Michael Chemo---------------------------------------------------
