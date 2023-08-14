@@ -1,3 +1,29 @@
+//----Moshe Cohen---------------------------------------------------
+//--jump-----------\
+var isJumping = false,
+  Current_position = 0;
+function Jump() {
+  let character = document.getElementsByClassName("Character")[0];
+  isJumping = true;
+  var Up = setInterval(() => {
+    Current_position++;
+    character.style.bottom = `${Current_position}px`;
+    if (Current_position >= 100) {
+      clearInterval(Up);
+      Down = setInterval(() => {
+        Current_position--;
+        character.style.bottom = `${Current_position}px`;
+        if (Current_position <= 0) {
+          clearInterval(Down);
+          isJumping = false;
+        }
+      }, 10);
+    }
+  }, 10);
+}
+document.addEventListener("keypress", (e) => {
+  if (e.code == "Space" && !isJumping) Jump();
+});
 //--Timer-----------
 let sec = 0,
   min = 0;
