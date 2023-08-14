@@ -1,29 +1,3 @@
-//----Moshe Cohen---------------------------------------------------
-//--jump-----------
-const character = document.getElementsByClassName("Character")[0];
-var isJumping = false,
-  Current_position = 0;
-function jump() {
-  isJumping = true;
-  var jump = setInterval(() => {
-    Current_position++;
-    character.style.bottom = `${Current_position}px`;
-    if (Current_position >= 100) {
-      clearInterval(jump);
-      jump = setInterval(() => {
-        Current_position--;
-        character.style.bottom = `${Current_position}px`;
-        if (Current_position <= 0) {
-          clearInterval(jump);
-          isJumping = false;
-        }
-      }, 10);
-    }
-  }, 10);
-}
-document.addEventListener("keypress", (e) => {
-  if (e.code == "Space" && !isJumping) jump();
-});
 //--Timer-----------
 let sec = 0,
   min = 0;
@@ -35,7 +9,7 @@ function Timer() {
       min++;
     }
     document.querySelector(".Timer").innerHTML = Time;
-  }, 1000);
+  }, 250);
 }
 function addZero(Val) {
   if (Val.toString().length == 1) {
@@ -43,6 +17,19 @@ function addZero(Val) {
   } else {
     return `${Val}`;
   }
+}
+//--Object-Movment-----------
+function Move(object, time) {
+  object.style.bottom = "0px";
+  object.style.position = "absolute";
+  let Obj_pos = 0;
+  let go = setInterval(() => {
+    object.style.right = `${Obj_pos++}%`;
+    if (Obj_pos > 100) {
+      Obj_pos = 0;
+      clearInterval(go);
+    }
+  }, time);
 }
 //----Zion Amar---------------------------------------------------
 function startGame() {
@@ -60,11 +47,11 @@ function startGame() {
 }
 //----Michael Chemo---------------------------------------------------
 function clouds() {
-  var Map = document.getElementsByClassName("Map")[0],
+  let Map = document.getElementsByClassName("Map")[0],
     cloudMotion1 = -random_number(400, 200),
     cloudMotion2 = -random_number(500, 300);
   create_Cloud(Map, 2);
-  var cloud1 = document.getElementsByClassName("clouds")[0],
+  let cloud1 = document.getElementsByClassName("clouds")[0],
     cloud2 = document.getElementsByClassName("clouds")[1];
   cloud1.classList.add("CloudVibesHigh");
   cloud2.classList.add("CloudVibesLow");
@@ -95,10 +82,8 @@ function create_Cloud(elm, numberOfClouds) {
     <div></div>
     <div></div>
     </div>`;
-    console.log(elm.innerHTML);
   }
 }
-
 function trees() {
   let treeBG_holder = document.getElementsByClassName("Map")[0];
   treeBG_holder.innerHTML += `<div class="treesBG"></div>`;
