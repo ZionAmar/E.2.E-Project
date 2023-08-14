@@ -35,7 +35,7 @@ function Timer() {
       min++;
     }
     document.querySelector(".Timer").innerHTML = Time;
-  }, 250);
+  }, 1000);
 }
 function addZero(Val) {
   if (Val.toString().length == 1) {
