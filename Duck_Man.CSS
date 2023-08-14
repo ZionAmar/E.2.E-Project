@@ -51,6 +51,9 @@ body {
   height: 4rem;
   position: relative;
   background-color: chartreuse;
+  background-size: contain;
+  background-position: 10rem;
+  background-image: url("./Site_Imgs/BackGround/Grass_Bg.png");
 }
 .Character {
   left: 10rem;
@@ -88,6 +91,10 @@ body {
   margin: 10px;
   border-radius: 25px;
   background-color: bisque;
+}
+.Menu .btn:hover {
+  color: bisque;
+  background-color: black;
 }
 /*----Menu----*/
 /*----Clouds----*/
@@ -154,7 +161,7 @@ body {
 /*----Clouds----*/
 /*----trees----*/
 .treesBG {
-  background: url(./Site_Img/trees/trees-bg-removebg-preview.png);
+  background: url(./Site_Imgs/BackGround/Trees_Bg.png);
   background-repeat: repeat-x;
   height: 100%;
   width: 100%;
