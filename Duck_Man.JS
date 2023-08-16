@@ -114,4 +114,26 @@ function trees() {
   let treeBG_holder = document.getElementsByClassName("Map")[0];
   treeBG_holder.innerHTML += `<div class="treesBG"></div>`;
 }
+function localStoragePlayerScore(time, name) {
+  let playerStatArry = [];
+  if (localStorage.playerStatic)
+    playerStatArry = JSON.parse(localStorage.playerStatic);
+  let line = { Name: name, Time: time };
+  playerStatArry.push(line);
+  localStorage.playerStatic = JSON.stringify(playerStatArry);
+  return sortToHighScore(playerStatArry);
+}
+function sortToHighScore(arrayObj) {
+  arrayObj.sort((a, b) => {
+    let fa = a.Time,
+      fb = b.Time;
+    if (fa > fb) return -1;
+
+    if (fa < fb) return 1;
+
+    return 0;
+  });
+  return arrayObj;
+}
+
 //----Nati Pinyan--------------------------------------
