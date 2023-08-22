@@ -89,7 +89,7 @@ function Pause() {
   document.querySelector(".Menu").style.display = "flex";
   Btns = [
     `<button class="btn" onclick="Play()"><b>Play</b></button>`,
-    `<button class="btn" onclick="startGame()">New Game</button>`,
+    `<button class="btn" onclick="GameOver()">New Game</button>`,
     `<button class="btn" onclick="Exit()">Exit</button>`,
   ];
   document.querySelector(
@@ -113,6 +113,47 @@ function startGame() {
   <div class="Timer">Timer: 00:00</div>
   <div class="Points">Points:</div>`;
   Timer();
+}
+function GameOver() {
+  let raw_data = [
+    { name: "zion", phone: "054", pobox: "111" },
+    { name: "nati", phone: "053", pobox: "222" },
+    { name: "micael", phone: "052", pobox: "333" },
+    { name: "moshe", phone: "050", pobox: "444" },
+    { name: "avshalom", phone: "055", pobox: "555" },
+    { name: "dor", phone: "051", pobox: "666" },
+  ];
+  // document.querySelector("#gameScreen").style.opacity = ;
+  document.querySelector(".Menu").style.display = "none";
+  document.querySelector(
+    "#gameScreen"
+  ).innerHTML = `<div class="GameOver">Game Over</div>`;
+  setTimeout(function () {
+    document.querySelector("#title").innerHTML = "High Score";
+    document.querySelector("#gameScreen").innerHTML = `<div class="Table">
+  <table>
+  <thead>
+  <tr>
+      <th>Name</th>
+      <th>Point</th>
+      <th>Time</th>
+  </tr>
+  </thead>
+  <tbody id="mainTable"></tbody>
+</table><button class="btn" onclick="Menu()">Menu Game</button></div>`;
+    CreateTble(raw_data);
+  }, 2000);
+}
+function CreateTble(data) {
+  let str = "";
+  for (let line of data) {
+    str += "<tr>";
+    str += `<td>${line.name}</td>`;
+    str += `<td>${line.phone}</td>`;
+    str += `<td>${line.pobox}</td>`;
+    str += "</tr>";
+  }
+  document.getElementById("mainTable").innerHTML = str;
 }
 //----Michael Chemo---------------------------------------------------
 function clouds() {
