@@ -1,4 +1,13 @@
 //----Moshe Cohen---------------------------------------------------
+let Update = undefined;
+function StartStop() {
+  if (Update == undefined) {
+    Update = setInterval(GameUpdateLoop, 20);
+  } else {
+    clearInterval(Update);
+    Update = undefined;
+  }
+}
 let Update = setInterval(GameUpdateLoop, 20);
 function GameUpdateLoop() {
   updateObject();
