@@ -1,4 +1,5 @@
 //----Moshe Cohen---------------------------------------------------
+//--Game-Loop---------
 let Update = undefined;
 function StartStop() {
   if (Update == undefined) {
@@ -43,6 +44,7 @@ let Xval = 0.5;
 function updateObject() {
   document.querySelectorAll(".Object").forEach((Obj) => {
     increaseObjectProp(Obj, "--right", Xval);
+    IsDead(document.querySelector(".Character"), Obj);
     if (getObjectProp(Obj, "--right") >= 100) Obj.remove();
   });
   if (NextObject <= 0) {
@@ -59,6 +61,15 @@ function createObject() {
   document.getElementsByClassName("Map")[0].append(Obj);
   setObjectProp(Obj, "--right", 0);
   return Obj;
+}
+function IsDead(duck, Obj) {
+  let DuckBottom = getObjectProp(duck, "bottom");
+  let ObjHeight = getObjectProp(Obj, "height");
+  let ObjRight = getObjectProp(Obj, "right") + getObjectProp(Obj, "width");
+  let ObjLeft = getObjectProp(Obj, "left") + getObjectProp(Obj, "width");
+  if (DuckBottom < ObjHeight && 1152 < ObjRight && 88 < ObjLeft) {
+    GameOver();
+  }
 }
 //--get-set-inc-dec---
 function getObjectProp(Elem, Prop) {
