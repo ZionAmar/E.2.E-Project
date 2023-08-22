@@ -57,15 +57,37 @@ body {
   padding: 10px;
   width: fit-content;
 }
-.grass {
+.ground {
   width: 100%;
-  height: 4rem;
+  height: 3rem;
   position: relative;
-  background-color: chartreuse;
-  background-size: contain;
-  background-position: 10rem;
-  background-image: url("./Site_Imgs/BackGround/Grass_Bg.png");
+  background-color: rgb(125, 208, 41);
 }
+.ground .topGround {
+  position: relative;
+  top: 0px;
+  height: 1rem;
+  background-color: rgb(50, 90, 9);
+}
+#grass {
+  position: absolute;
+  width: 100%;
+  height: 2rem;
+  bottom: 3rem;
+  background-size: 300px;
+  background-position: 2.5rem 2.5rem;
+  animation: grassBGMotion 4000ms infinite linear;
+  background-image: url(./Site_Imgs/BackGround/grass-removebg-preview.png);
+}
+@keyframes grassBGMotion {
+  0% {
+    background-position-x: 0px;
+  }
+  100% {
+    background-position-x: -1200px;
+  }
+}
+
 .Character {
   --bottom: 0;
   right: 90%;
