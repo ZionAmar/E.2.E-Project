@@ -9,16 +9,20 @@ body {
   background-color: darkcyan;
 }
 #Wrapper {
+  position: relative;
   width: 1400px;
 }
 #title {
+  color: white;
+  padding-top: 1rem;
   text-align: center;
+  font-size: 60px;
 }
 #gameScreen {
   width: 80rem;
-  display: none;
+  display: block;
   height: 40rem;
-  margin-top: 5%;
+  margin-top: 2%;
   overflow: hidden;
   border-radius: 2rem;
 }
@@ -39,12 +43,19 @@ body {
   justify-content: space-around;
   position: relative;
 }
+.Hud .pause:hover {
+  background-color: black;
+  color: white;
+}
 .Hud .Player,
 .Hud .Points,
+.Hud .pause,
 .Hud .Health,
 .Hud .Timer {
+  border: solid black 2px;
+  border-radius: 25px;
+  padding: 10px;
   width: fit-content;
-  height: 100%;
 }
 .grass {
   width: 100%;
@@ -79,30 +90,27 @@ body {
 /*----Map----*/
 /*----Menu----*/
 .Menu {
+  /* border: solid black 2px; */
+  position: absolute;
+  z-index: +1;
+  width: 75.9rem;
+  height: 30rem;
+  margin-top: 3.5rem;
   display: flex;
-  width: 1000px;
-  height: 600px;
+  padding: 2em;
   flex-direction: column;
 }
-.Menu .img {
-  width: 400px;
-  height: 300px;
-  margin: 10px;
-}
+.Menu .btn,
 .Menu .PlayerName {
   text-align: center;
   font-size: x-large;
-  width: 400px;
+  width: 300px;
   height: 50px;
   margin: 10px;
   border-radius: 25px;
 }
+
 .Menu .btn {
-  width: 200px;
-  margin: 20em;
-  height: 50px;
-  margin: 10px;
-  border-radius: 25px;
   background-color: bisque;
 }
 .Menu .btn:hover {
