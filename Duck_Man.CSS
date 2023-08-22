@@ -77,7 +77,6 @@ body {
 /*----Map----*/
 /*----Menu----*/
 .Menu {
-  /* border: solid black 2px; */
   position: absolute;
   z-index: +1;
   width: 75.9rem;
@@ -87,6 +86,7 @@ body {
   padding: 2em;
   flex-direction: column;
 }
+.Table.btn,
 .Menu .btn,
 .Menu .PlayerName {
   text-align: center;
@@ -96,7 +96,6 @@ body {
   margin: 10px;
   border-radius: 25px;
 }
-
 .Menu .btn {
   background-color: bisque;
 }
@@ -104,7 +103,33 @@ body {
   color: bisque;
   background-color: black;
 }
+.GameOver {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: aliceblue;
+  color: aquamarine;
+  font-size: 20em;
+  display: flex;
+}
 /*----Menu----*/
+/*----Table----*/
+.Table {
+  display: flex;
+  font-size: xx-large;
+  flex-direction: column;
+}
+td {
+  margin: 10px;
+  padding: 15px;
+  border: 1px solid black;
+}
+th {
+  text-align: left;
+  padding: 15px;
+  margin: 20px;
+}
+/*----Table----*/
 /*----Clouds----*/
 .clouds {
   width: 170px;
