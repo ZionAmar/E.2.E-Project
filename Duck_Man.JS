@@ -8,7 +8,6 @@ function StartStop() {
     Update = undefined;
   }
 }
-let Update = setInterval(GameUpdateLoop, 20);
 function GameUpdateLoop() {
   updateObject();
   if (isJumping) Jump();
