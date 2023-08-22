@@ -1,31 +1,72 @@
 //----Moshe Cohen---------------------------------------------------
-//--jump-----------\
-var isJumping = false,
-  Current_position = 0;
-function Jump() {
-  let character = document.getElementsByClassName("Character")[0];
-  isJumping = true;
-  var Up = setInterval(() => {
-    Current_position++;
-    character.style.bottom = `${Current_position}px`;
-    if (Current_position >= 100) {
-      clearInterval(Up);
-      Down = setInterval(() => {
-        Current_position--;
-        character.style.bottom = `${Current_position}px`;
-        if (Current_position <= 0) {
-          clearInterval(Down);
-          isJumping = false;
-        }
-      }, 10);
-    }
-  }, 10);
+let Update = setInterval(GameUpdateLoop, 20);
+function GameUpdateLoop() {
+  updateObject();
+  if (isJumping) Jump();
 }
-document.addEventListener("keypress", (e) => {
-  if (e.code == "Space" && !isJumping) Jump();
+//--jump--------------
+const JUMP_SPEED = 4;
+const GRAVITY = 0.2;
+let isJumping = false;
+let Yval;
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space" && !isJumping) {
+    Yval = JUMP_SPEED;
+    isJumping = true;
+  }
+  if (e.shiftKey && !isJumping) {
+    Yval = JUMP_SPEED - 1;
+    isJumping = true;
+  }
 });
-//--Timer-----------
-let sec = 1,
+function Jump() {
+  if (!isJumping) return;
+  let duck = document.querySelector(".Character");
+  increaseObjectProp(duck, "--bottom", Yval);
+  if (getObjectProp(duck, "--bottom") <= 0) {
+    setObjectProp(duck, "--bottom", 0);
+    isJumping = false;
+  }
+  Yval -= GRAVITY;
+}
+//--Objects-----------
+let NextObject = 500;
+let Xval = 0.5;
+function updateObject() {
+  document.querySelectorAll(".Object").forEach((Obj) => {
+    increaseObjectProp(Obj, "--right", Xval);
+    if (getObjectProp(Obj, "--right") >= 100) Obj.remove();
+  });
+  if (NextObject <= 0) {
+    createObject();
+    NextObject = random_number(2000, 500);
+  }
+  NextObject -= 10;
+}
+function createObject() {
+  let Obj = document.createElement("div");
+  let rand = random_number(2, 0);
+  Obj.classList.add(`Object${rand}`);
+  Obj.classList.add(`Object`);
+  document.getElementsByClassName("Map")[0].append(Obj);
+  setObjectProp(Obj, "--right", 0);
+  return Obj;
+}
+//--get-set-inc-dec---
+function getObjectProp(Elem, Prop) {
+  return parseFloat(getComputedStyle(Elem).getPropertyValue(Prop));
+}
+function setObjectProp(Elem, Prop, Value) {
+  Elem.style.setProperty(Prop, Value);
+}
+function increaseObjectProp(Elem, Prop, inc) {
+  setObjectProp(Elem, Prop, getObjectProp(Elem, Prop) + inc);
+}
+function decreaseObjectProp(Elem, Prop, dec) {
+  setObjectProp(Elem, Prop, getObjectProp(Elem, Prop) - dec);
+}
+//--Timer-------------
+let sec = 0,
   min = 0;
 function Timer() {
   setInterval(() => {
@@ -43,19 +84,6 @@ function addZero(Val) {
   } else {
     return `${Val}`;
   }
-}
-//--Object-Movment-----------
-function Move(object, time) {
-  object.style.bottom = "0px";
-  object.style.position = "absolute";
-  let Obj_pos = 0;
-  let go = setInterval(() => {
-    object.style.right = `${Obj_pos++}%`;
-    if (Obj_pos > 100) {
-      Obj_pos = 0;
-      clearInterval(go);
-    }
-  }, time);
 }
 //----Zion Amar---------------------------------------------------
 let inputName = "";
