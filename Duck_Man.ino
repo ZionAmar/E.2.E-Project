@@ -1,53 +1,36 @@
+#include <Keyboard.h>
 #define sendInfoSound 2     // הגדרת פין שליחת סאונד
 #define responsInfoSound 4  // הגדרת פין קבלת סאונד
 
 float time, lengthDistance, firstChek, num;  //  משתנה טיים הוא לזמן,משתה דיסטאנס למרחק,משתנה נאם לחישובים
+int numbersOfCheck[5];
 
 void setup() {
   Serial.begin(9600);
   pinMode(sendInfoSound, OUTPUT);    // הגדרת המשתנה ששולח קול לאאוטפוט
   pinMode(responsInfoSound, INPUT);  // הגדרת המשתנה ששולח קול לאינפוט
   firstChek = chek();
-  Serial.print("The initial distance of the Duckman is  =");  // הדפסת תבנית המרחק
-  Serial.println(firstChek);                                  // הדפסת המרחק
 }
-
 void loop() {
-  /*num = chek();
-  if (num > firstChek +10){
-    Serial.println("up"); 
+  for (int i = 0; i<5; i++) {
+  numbersOfCheck[i] = chek();  
+  }  
+  num = correctDistance(numbersOfCheck);  
+  Serial.println(num);
+  Serial.println(firstChek);
+  if (num < (firstChek - 10)){
+      Serial.println("up"); 
+      /*Serial.println(num);
+      Serial.println(firstChek);
+    Keyboard.print("u") ;*/
   }
-  if (num < firstChek -10){
+  if (num > (firstChek + 10)){
     Serial.println("down");
-    
-  }*/
-  //  אופציה ראשונית של זיהוי קפיצה והתכופפות בלבד
-
-  num = chek();
-  float sum = 100 * (num - firstChek) / firstChek;
-  Serial.print(String(num) + " this is now chek, ");
-  if (sum > 1 && sum < 20) {
-    Serial.print(" small down ");
+    /*Serial.println(num);
+    Serial.println(firstChek);
+    Keyboard.print("d");*/ 
   }
-  if (sum > 20 && sum < 40) {
-    Serial.print(" down ");
-  }
-  if (sum > 40 && sum < 60) {
-    Serial.print(" big down ");
-  }
-  if (sum < -1 && sum > -20) {
-    Serial.print(" small jump ");
-  }
-  if (sum < -20 && sum > -40) {
-    Serial.print(" jump ");
-  }
-  if (sum < -40 && sum > -60) {
-    Serial.print(" big jump ");
-  }
-
-  Serial.println(String(sum) + "% this is the precent change");
-}
-
+}  
 int chek() {
   digitalWrite(sendInfoSound, LOW);  // איפוס פרמטרים של שליחה
   delayMicroseconds(2);
@@ -56,7 +39,37 @@ int chek() {
   digitalWrite(sendInfoSound, LOW);        // סיום שליחת הפולס
   time = pulseIn(responsInfoSound, HIGH);  // הגדרת המשתנה טיים לשווי מדידת הפולס
   lengthDistance = time / 29 / 2;          // חישוב המרחק ע"י נוסחה קבועה מראש
-
-  delay(1000);  // דיליי בין בדיקות
+  delay(300);  // דיליי בין בדיקות
   return lengthDistance;
 }
+int correctDistance( int pulsArry []){
+  int best = 0; 
+  int lower = 0;
+  int avgResponse = 0;
+  best  = pulsArry[0];
+  lower = pulsArry[0];
+  for (int i = 0 ; i<5  ; i++) {
+    if(pulsArry [i] > best){
+      best = pulsArry [i] ;
+    }
+     if(pulsArry [i] < lower){
+      lower = pulsArry [i] ;
+    }
+  }  
+   for (int i = 0 ; i< 5  ; i++) {  
+     avgResponse += pulsArry[i];
+  } 
+  avgResponse-= best;
+  avgResponse-= lower;
+  return avgResponse /3; 
+}
+/*Serial.println(avgResponse);
+     Serial.println("avg1");
+    Serial.println(best);
+    Serial.println("b");
+    Serial.println(lower);
+    Serial.println("luo");
+    avgResponse = avgResponse /3;
+    Serial.println(avgResponse);  
+    Serial.println("avg");
+    Serial.println("..................................");*/
