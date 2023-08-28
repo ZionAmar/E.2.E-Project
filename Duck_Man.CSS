@@ -35,7 +35,6 @@ body {
   background-color: aquamarine;
 }
 .Hud {
-  font-size: x-large;
   top: 5%;
   width: 100%;
   height: 10%;
@@ -43,18 +42,19 @@ body {
   justify-content: space-around;
   position: relative;
 }
+.Hud .pause {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+}
 .Hud .pause:hover {
-  background-color: black;
   color: white;
 }
 .Hud .Player,
-.Hud .Points,
 .Hud .pause,
-.Hud .Health,
 .Hud .Timer {
-  border: solid black 2px;
-  border-radius: 25px;
   padding: 10px;
+  font-size: 40px;
+  font-weight: bolder;
   width: fit-content;
 }
 .ground {
@@ -99,25 +99,27 @@ body {
 }
 .Object {
   --right: 0;
-  width: 50px;
-  height: 50px;
   bottom: 0px;
   right: calc(var(--right) * 1%);
   position: absolute;
-  background-color: blue;
+}
+/* .Object0 {
 }
 .Object1 {
-  height: 100px;
 }
+.Object2 {
+}
+.Object3 {
+} */
 /*----Map----*/
 /*----Menu----*/
 .Menu {
-  /* border: solid black 2px; */
   position: absolute;
-  z-index: +1;
+  border-radius: 2rem;
+  z-index: +3;
   width: 75.9rem;
-  height: 30rem;
-  margin-top: 3.5rem;
+  height: 35.9rem;
+  margin-top: 1.6rem;
   display: flex;
   padding: 2em;
   flex-direction: column;
@@ -139,7 +141,39 @@ body {
   color: bisque;
   background-color: black;
 }
+.GameOver {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: aquamarine;
+  font-size: 20em;
+  display: flex;
+}
 /*----Menu----*/
+/*----Table----*/
+.Table {
+  background-color: aquamarine;
+  border: black 2px solid;
+  border-radius: 2rem;
+  display: flex;
+  font-size: xx-large;
+  flex-direction: column;
+}
+th {
+  padding: 15px;
+  margin: 20px;
+}
+tbody tr:nth-child(1) {
+  font-weight: bold;
+}
+td {
+  padding: 15px;
+  border-left: 1px solid black;
+}
+td:nth-child(1) {
+  border: none;
+}
+/*----Table----*/
 /*----Clouds----*/
 .clouds {
   width: 170px;
