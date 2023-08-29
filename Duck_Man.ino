@@ -29,19 +29,13 @@ void setup() {
 }
 
 void loop() {
-  /*for(int i = 0;i<4;i++){
-  numbersOfCheck_ses1[i] = chekSensor_1(); 
-  numbersOfCheck_ses2[i] = chekSensor_2(); 
-  }
-  num_ses1 = Avg_Ses1(numbersOfCheck_ses1);
-  num_ses2 = Avg_Ses2(numbersOfCheck_ses2);*/
-   correntVal = digitalRead(btn);
-  if((correntVal == HIGH) &&( lastVal == LOW) && ( millis() - lastTimeMilis > 50)){
+  
+  correntVal = digitalRead(btn);
+  if((correntVal == HIGH) && ( lastVal == LOW) && ( millis() - lastTimeMilis > 50)){
    lastTimeMilis = millis();
    toggle();
   }   
   lastVal = correntVal;
-
 
   num_ses1 = chekSensor_1();  
   num_ses2 = chekSensor_2(); 
@@ -51,7 +45,6 @@ void loop() {
   }
 }
   
-
 }
 int chekSensor_1() {
   digitalWrite(sendInfoSound_Ses1, LOW); 
@@ -95,49 +88,5 @@ void ledOff() {
 }
   
 
-
-
-int Avg_Ses1( int pulsArry []){
-  int best = 0; 
-  int lower = 0;
-  int avgResponse = 0;
-  best  = pulsArry[0];
-  lower = pulsArry[0];
-  for (int i = 0 ; i<4 ; i++) {
-    if(pulsArry [i] > best){
-      best = pulsArry [i] ;
-    }
-     if(pulsArry [i] < lower){
-      lower = pulsArry [i] ;
-    }
-  }  
-   for (int i = 0 ; i< 4  ; i++) {  
-     avgResponse += pulsArry[i];
-  } 
-  avgResponse-= best;
-  avgResponse-= lower;
-  return avgResponse / 2; 
-}
-int Avg_Ses2( int pulsArry []){
-  int best = 0; 
-  int lower = 0;
-  int avgResponse = 0;
-  best  = pulsArry[0];
-  lower = pulsArry[0];
-  for (int i = 0 ; i<4  ; i++) {
-    if(pulsArry [i] > best){
-      best = pulsArry [i] ;
-    }
-     if(pulsArry [i] < lower){
-      lower = pulsArry [i] ;
-    }
-  }  
-   for (int i = 0 ; i< 4  ; i++) {  
-     avgResponse += pulsArry[i];
-  } 
-  avgResponse-= best;
-  avgResponse-= lower;
-  return avgResponse / 2; 
-}
 
 
