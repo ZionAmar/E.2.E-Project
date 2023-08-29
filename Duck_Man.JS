@@ -10,28 +10,22 @@ function StartStop() {
   }
 }
 function GameUpdateLoop() {
-  Timer();
   updateObject();
-  updateCloud();
   if (isJumping) Jump();
-  else WolkCharImg();
 }
 //--jump--------------
-const GRAVITY = 0.2;
 const JUMP_SPEED = 4;
-let Yval;
+const GRAVITY = 0.2;
 let isJumping = false;
+let Yval;
 document.addEventListener("keydown", (e) => {
-  if (Update == undefined) return;
   if (e.code === "Space" && !isJumping) {
     Yval = JUMP_SPEED;
     isJumping = true;
-    if (isMuted) playSound("./Site_Audio/JumpSound.mp4");
   }
   if (e.shiftKey && !isJumping) {
     Yval = JUMP_SPEED - 1;
     isJumping = true;
-    if (isMuted) playSound("./Site_Audio/JumpSound.mp4");
   }
 });
 function Jump() {
@@ -45,8 +39,8 @@ function Jump() {
   Yval -= GRAVITY;
 }
 //--Objects-----------
-const Xval = 0.5;
 let NextObject = 500;
+let Xval = 0.5;
 function updateObject() {
   document.querySelectorAll(".Object").forEach((Obj) => {
     increaseObjectProp(Obj, "--right", Xval);
@@ -61,7 +55,7 @@ function updateObject() {
 }
 function createObject() {
   let Obj = document.createElement("div");
-  let rand = random_number(4, 0);
+  let rand = random_number(2, 0);
   Obj.classList.add(`Object${rand}`);
   Obj.classList.add(`Object`);
   document.getElementsByClassName("Map")[0].append(Obj);
@@ -91,27 +85,32 @@ function decreaseObjectProp(Elem, Prop, dec) {
   setObjectProp(Elem, Prop, getObjectProp(Elem, Prop) - dec);
 }
 //--Timer-------------
+let Time = "";
+(sec = 1), (min = 0);
 function Timer() {
-  document.querySelector(".Timer").innerText =
-    Number(document.querySelector(".Timer").innerText) + 1;
+  setInterval(() => {
+    Time = `${addZero(min)}:${addZero(sec++)}`;
+    if (sec >= 60) {
+      sec = 0;
+      min++;
+    }
+    document.querySelector(".Timer").innerHTML = `Timer: ${Time}`;
+  }, 1000);
 }
-//--Audio-------------
-function playSound(SoundUrl, Loop = false) {
-  let Sound = new Audio(SoundUrl);
-  Sound.play();
-  Sound.loop = Loop;
+function addZero(Val) {
+  if (Val.toString().length == 1) {
+    return `0${Val}`;
+  } else {
+    return `${Val}`;
+  }
 }
 //----Zion Amar---------------------------------------------------
 let inputName = "";
 let Btns = [];
 let isMuted = "";
-Menu();
-
 function Menu() {
-  document.querySelector("#gameScreen").style.opacity = 1;
   document.querySelector("#title").innerHTML = "Duck Man Game";
-  document.querySelector(".Hud").innerHTML = "";
-  inputName = `<input class="PlayerName" placeholder="Enter Your Name..." type="text" />`;
+  inputName = `<input class="PlayerName" placeholder="Enter Your Name..."/>`;
   Btns = [
     `<button class="btn" onclick="startGame()"><b>Start Game</b></button>`,
     `<button class="btn" id="isMuted" onclick="Mute()"></button>`,
@@ -135,44 +134,36 @@ function Mute() {
 }
 function Pause() {
   StartStop();
-  Mute();
-  inputName = "";
-  document.querySelector("#gameScreen").style.opacity = 0.1;
-  document.querySelector(".Menu").style.display = "flex";
   Btns = [
     `<button class="btn" onclick="Play()"><b>Resume</b></button>`,
-    `<button class="btn" onclick="Menu()">New Game</button>`,
+    `<button class="btn" onclick="window.location.reload()">New Game</button>`,
     `<button class="btn" onclick="Exit()">Exit</button>`,
   ];
+  document.querySelector("#gameScreen").style.opacity = 0.1;
+  document.querySelector(".Menu").style.display = "flex";
   document.querySelector(
     ".Menu"
   ).innerHTML = `<h1>Pause Menu</h1>${Btns[0]}${Btns[1]}${Btns[2]}`;
 }
 function Play() {
   StartStop();
-  document.querySelector(".Menu").style.display = "none";
   document.querySelector("#gameScreen").style.opacity = 1;
+  document.querySelector(".Menu").style.display = "none";
 }
 function Exit() {
   if (confirm("Are you sure?")) window.close();
 }
-let PlayerName = "";
 function startGame() {
-  if (inputName) {
-    PlayerName = document.querySelector(".PlayerName").value;
-  }
+  PlayerName = document.querySelector(".PlayerName").value;
   if (PlayerName) {
     document.querySelector(".Menu").style.display = "none";
-    document.querySelector("#gameScreen").style.opacity = 1;
     StartStop();
-    (sec = 1), (min = 0);
-    document.querySelector("#title").innerHTML = "Duck Man Game";
     trees();
     clouds();
     document.querySelector(".Hud").innerHTML = `
   <div class="Player">Player: ${PlayerName}</div>
   <button class="pause" onclick="Pause()" style="font-size:44px"><i class="fa fa-pause"></i></button>
-  <div class="Timer">0</div>`;
+  <div class="Timer">Timer: 00:00</div>`;
     Timer();
   } else {
     alert("Please enter your name!");
@@ -198,7 +189,7 @@ function GameOver() {
   </tr>
   </thead>
   <tbody id="mainTable"></tbody>
-</table></div><div><button class="btn" onclick="Menu()" style="width: 150px;">Play Again</button><button class="btn" onclick="Exit()" style="width: 150px;">Exit</button></div>`;
+</table></div><div><button class="btn" onclick="window.location.reload()" style="width: 150px;">Play Again</button><button class="btn" onclick="Exit()" style="width: 150px;">Exit</button></div>`;
     localStoragePlayerScore(Time, PlayerName);
   }, 2000);
 }
@@ -215,65 +206,43 @@ function CreateTble(data) {
   document.getElementById("mainTable").innerHTML = str;
 }
 //----Michael Chemo---------------------------------------------------
-let cloudXVal = 0.1,
-  nextCloud = 0,
-  frmCntChar = 0,
-  frmCntObj = 0,
-  isChar1 = false;
-const cloudsArray = ["cloudImg1", "cloudImg2"];
-const largObjArray = [
-  "url(./Site_Imgs/Objects/object1-right_leg_up-removebg-preview.png)",
-  "url(./Site_Imgs/Objects/object1-left_leg_up-removebg-preview.png)",
-];
-
-function updateCloud() {
-  document.querySelectorAll(".clouds").forEach((Obj) => {
-    increaseObjectProp(Obj, "--right", cloudXVal);
-    if (getObjectProp(Obj, "--right") >= 100) Obj.remove();
-  });
-  if (nextCloud <= 0) {
-    create_Cloud();
-    nextCloud = random_number(5000, 3000);
-  }
-  nextCloud -= 10;
-}
-function create_Cloud() {
-  let cloud = document.createElement("div"),
-    size = random_number(30, 10),
-    height = random_number(20, 30),
-    inx = random_number(2, 0);
-  cloud.classList.add(`clouds`);
-  document.getElementsByClassName("Map")[0].append(cloud);
-  setObjectProp(cloud, "--right", size * -1);
-  setObjectProp(cloud, "--size", size);
-  setObjectProp(cloud, "--height", height);
-  setCalss(cloud, cloudsArray[inx]);
-}
-
-function WolkCharImg() {
-  let char = document.querySelector(".Character");
-  if (frmCntChar >= 10) {
-    frmCntChar = 0;
-    if (!isChar1) {
-      char.style.backgroundImage =
-        "url(./Site_Imgs/Charecter/duck1-removebg-preview.png)";
-      isChar1 = true;
-    } else {
-      char.style.backgroundImage =
-        "url(./Site_Imgs/Charecter/duck2-removebg-preview.png)";
-      isChar1 = false;
+function clouds() {
+  let Map = document.getElementsByClassName("Map")[0],
+    cloudMotion1 = -random_number(400, 200),
+    cloudMotion2 = -random_number(500, 300);
+  create_Cloud(Map, 2);
+  let cloud1 = document.getElementsByClassName("clouds")[0],
+    cloud2 = document.getElementsByClassName("clouds")[1];
+  cloud1.classList.add("CloudVibesHigh");
+  cloud2.classList.add("CloudVibesLow");
+  setInterval(function () {
+    if (cloudMotion1 >= random_number(1500, 1300)) {
+      cloudMotion1 = -random_number(400, 200);
+      let size = `${random_number(250, 200)}px`;
+      cloud1.style.height = size;
+      cloud1.style.width = size;
     }
-  } else {
-    frmCntChar++;
-  }
+    cloud1.style.right = `${cloudMotion1++}px`;
+    if (cloudMotion2 >= random_number(1500, 1300)) {
+      cloudMotion2 = -random_number(400, 200);
+      let size = `${random_number(150, 100)}px`;
+      cloud2.style.height = size;
+      cloud2.style.width = size;
+    }
+    cloud2.style.right = `${cloudMotion2++}px`;
+  }, 10);
 }
-
-function setCalss(elm, className) {
-  elm.classList.add(className);
-}
-
 function random_number(max, min) {
   return Math.floor(Math.random() * (max - min)) + min;
+}
+function create_Cloud(elm, numberOfClouds) {
+  for (let i = 0; i < numberOfClouds; i++) {
+    elm.innerHTML += `<div class="clouds">
+    <div></div>
+    <div></div>
+    <div></div>
+    </div>`;
+  }
 }
 function trees() {
   let treeBG_holder = document.getElementsByClassName("Map")[0];
@@ -285,7 +254,6 @@ function localStoragePlayerScore(time, name) {
     playerStatArry = JSON.parse(localStorage.playerStatic);
   let line = { Name: name, Time: time };
   playerStatArry.push(line);
-  localStorage.playerStatic = JSON.stringify(playerStatArry);
   return sortToHighScore(playerStatArry);
 }
 function sortToHighScore(arrayObj) {
@@ -298,6 +266,11 @@ function sortToHighScore(arrayObj) {
 
     return 0;
   });
+  if (arrayObj.length > 7) {
+    arrayObj.splice(7, arrayObj.length - 7);
+  }
+  localStorage.playerStatic = JSON.stringify(arrayObj);
+  CreateTble(arrayObj);
   return arrayObj;
 }
 
