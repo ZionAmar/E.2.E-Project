@@ -1,54 +1,109 @@
 #include <Keyboard.h>
-#define sendInfoSound 2     // הגדרת פין שליחת סאונד
-#define responsInfoSound 4  // הגדרת פין קבלת סאונד
+#define sendInfoSound_Ses1    2  
+#define responsInfoSound_Ses1 3
+#define sendInfoSound_Ses2    4   
+#define responsInfoSound_Ses2 5 
+#define btn 6
+#define led 7
 
-float time, lengthDistance, firstChek, num;  //  משתנה טיים הוא לזמן,משתה דיסטאנס למרחק,משתנה נאם לחישובים
-int numbersOfCheck[5];
+bool isLedOn;
+int correntVal;
+int lastVal;
+bool controlLed;
+unsigned long lastTimeMilis;
+float time, lengthDistance, firstChek,num_ses1,num_ses2; 
+int numbersOfCheck_ses1[4];
+int numbersOfCheck_ses2[4];
 
-void setup() {
+void setup() { 
   Serial.begin(9600);
-  pinMode(sendInfoSound, OUTPUT);    // הגדרת המשתנה ששולח קול לאאוטפוט
-  pinMode(responsInfoSound, INPUT);  // הגדרת המשתנה ששולח קול לאינפוט
-  firstChek = chek();
+  pinMode(sendInfoSound_Ses1, OUTPUT);   
+  pinMode(responsInfoSound_Ses1, INPUT);
+  pinMode(sendInfoSound_Ses2, OUTPUT);   
+  pinMode(responsInfoSound_Ses2, INPUT);
+  pinMode(btn,INPUT_PULLUP);
+  pinMode(led, OUTPUT);
+  isLedOn = false;
+  controlLed = false;
+  lastTimeMilis = millis();
 }
+
 void loop() {
-  for (int i = 0; i<5; i++) {
-  numbersOfCheck[i] = chek();  
-  }  
-  num = correctDistance(numbersOfCheck);  
-  Serial.println(num);
-  Serial.println(firstChek);
-  if (num < (firstChek - 10)){
-      Serial.println("up"); 
-      /*Serial.println(num);
-      Serial.println(firstChek);
-    Keyboard.print("u") ;*/
+  /*for(int i = 0;i<4;i++){
+  numbersOfCheck_ses1[i] = chekSensor_1(); 
+  numbersOfCheck_ses2[i] = chekSensor_2(); 
   }
-  if (num > (firstChek + 10)){
-    Serial.println("down");
-    /*Serial.println(num);
-    Serial.println(firstChek);
-    Keyboard.print("d");*/ 
+  num_ses1 = Avg_Ses1(numbersOfCheck_ses1);
+  num_ses2 = Avg_Ses2(numbersOfCheck_ses2);*/
+   correntVal = digitalRead(btn);
+  if((correntVal == HIGH) &&( lastVal == LOW) && ( millis() - lastTimeMilis > 50)){
+   lastTimeMilis = millis();
+   toggle();
+  }   
+  lastVal = correntVal;
+
+
+  num_ses1 = chekSensor_1();  
+  num_ses2 = chekSensor_2(); 
+  if(controlLed){
+  if((num_ses1 > 50)&&(num_ses2 > 50)){
+  Keyboard.print(" ") ;
   }
-}  
-int chek() {
-  digitalWrite(sendInfoSound, LOW);  // איפוס פרמטרים של שליחה
+}
+  
+
+}
+int chekSensor_1() {
+  digitalWrite(sendInfoSound_Ses1, LOW); 
   delayMicroseconds(2);
-  digitalWrite(sendInfoSound, HIGH);  // שליחת פולס סאונד למדידה
+  digitalWrite(sendInfoSound_Ses1, HIGH);   
   delayMicroseconds(10);
-  digitalWrite(sendInfoSound, LOW);        // סיום שליחת הפולס
-  time = pulseIn(responsInfoSound, HIGH);  // הגדרת המשתנה טיים לשווי מדידת הפולס
-  lengthDistance = time / 29 / 2;          // חישוב המרחק ע"י נוסחה קבועה מראש
-  delay(300);  // דיליי בין בדיקות
+  digitalWrite(sendInfoSound_Ses1, LOW);       
+  time = pulseIn(responsInfoSound_Ses1, HIGH);  
+  lengthDistance = time / 29 / 2;          
+  delay(3);        
   return lengthDistance;
 }
-int correctDistance( int pulsArry []){
+int chekSensor_2() {
+  digitalWrite(sendInfoSound_Ses2, LOW); 
+  delayMicroseconds(2);
+  digitalWrite(sendInfoSound_Ses2, HIGH);   
+  delayMicroseconds(10);
+  digitalWrite(sendInfoSound_Ses2, LOW);       
+  time = pulseIn(responsInfoSound_Ses2, HIGH);  
+  lengthDistance = time / 29 / 2;          
+  delay(3);        
+  return lengthDistance;
+}
+void toggle(){
+  if(isLedOn){
+    ledOff();
+    isLedOn = false;
+  }else{
+    ledOn();
+    isLedOn = true;
+  }
+}
+void ledOn() {
+  digitalWrite(led, HIGH);
+  controlLed = true;
+}
+
+void ledOff() {
+  digitalWrite(led, LOW);
+    controlLed = false;
+}
+  
+
+
+
+int Avg_Ses1( int pulsArry []){
   int best = 0; 
   int lower = 0;
   int avgResponse = 0;
   best  = pulsArry[0];
   lower = pulsArry[0];
-  for (int i = 0 ; i<5  ; i++) {
+  for (int i = 0 ; i<4 ; i++) {
     if(pulsArry [i] > best){
       best = pulsArry [i] ;
     }
@@ -56,20 +111,33 @@ int correctDistance( int pulsArry []){
       lower = pulsArry [i] ;
     }
   }  
-   for (int i = 0 ; i< 5  ; i++) {  
+   for (int i = 0 ; i< 4  ; i++) {  
      avgResponse += pulsArry[i];
   } 
   avgResponse-= best;
   avgResponse-= lower;
-  return avgResponse /3; 
+  return avgResponse / 2; 
 }
-/*Serial.println(avgResponse);
-     Serial.println("avg1");
-    Serial.println(best);
-    Serial.println("b");
-    Serial.println(lower);
-    Serial.println("luo");
-    avgResponse = avgResponse /3;
-    Serial.println(avgResponse);  
-    Serial.println("avg");
-    Serial.println("..................................");*/
+int Avg_Ses2( int pulsArry []){
+  int best = 0; 
+  int lower = 0;
+  int avgResponse = 0;
+  best  = pulsArry[0];
+  lower = pulsArry[0];
+  for (int i = 0 ; i<4  ; i++) {
+    if(pulsArry [i] > best){
+      best = pulsArry [i] ;
+    }
+     if(pulsArry [i] < lower){
+      lower = pulsArry [i] ;
+    }
+  }  
+   for (int i = 0 ; i< 4  ; i++) {  
+     avgResponse += pulsArry[i];
+  } 
+  avgResponse-= best;
+  avgResponse-= lower;
+  return avgResponse / 2; 
+}
+
+
